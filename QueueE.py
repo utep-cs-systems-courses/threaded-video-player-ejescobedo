@@ -1,24 +1,25 @@
-class QueueE:
+import threading
+from threading import Semaphore
 
-    size = 0
-    queue = []
-    
+class QueueE: 
     def __init__(self, capacity = 10):
+        self.queue = [] 
         self.capacity = capacity
+        self.semaphoreCapacity = threading.Semaphore(capacity)
+        self.semaphoreUsed = threading.Semaphore(0)
 
     def enqueue(self, item):
-        if self.size < 10:
-            print("here")
-            self.queue.append(item)
-            self.size = self.size + 1
+        self.semaphoreCapacity.acquire()
+        self.queue.append(item)
+        self.semaphoreUsed.release()
 
     def dequeue(self):
-        if self.size > 0:
-            self.size = self.size - 1
-        return self.queue.pop(0)
+        self.semaphoreUsed.acquire()
+        item = self.queue.pop(0)
+        self.semaphoreCapacity.release()
+        return item
 
     def peek(self):
-
         return self.queue[0]
 
 if __name__ == "__main__":
@@ -26,10 +27,6 @@ if __name__ == "__main__":
 
     currQ.enqueue("a")
     currQ.enqueue("b")
-    currQ.enqueue("c")
     print(currQ.queue)
-    print(currQ.peek())
     currQ.dequeue()
-    print(currQ.peek())
-    currQ.dequeue()
-    print(currQ.peek())
+    print(currQ.queue)
