@@ -22,11 +22,5 @@ class QueueE:
     def peek(self):
         return self.queue[0]
 
-if __name__ == "__main__":
-    currQ = QueueE(10)
 
-    currQ.enqueue("a")
-    currQ.enqueue("b")
-    print(currQ.queue)
-    currQ.dequeue()
-    print(currQ.queue)
+
